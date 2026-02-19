@@ -1,13 +1,13 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, Suspense } from "react";
 import { resetPassword } from "@/actions/reset";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Loader2, Lock, ArrowLeft, KeyRound } from "lucide-react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
     const searchParams = useSearchParams();
     const token = searchParams.get("token") || "";
     const [state, action, pending] = useActionState(resetPassword, undefined);
@@ -132,5 +132,17 @@ export default function ResetPasswordPage() {
                 </motion.div>
             </div>
         </div>
+    );
+}
+
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen w-full items-center justify-center bg-white dark:bg-black">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        }>
+            <ResetPasswordForm />
+        </Suspense>
     );
 }
